@@ -1,79 +1,461 @@
 <!doctype html>
 <html lang="my">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ZeeGone E-Football Tournament</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,'Noto Sans Myanmar',sans-serif;background:#0b1020;color:#f4f6ff}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,'Noto Sans Myanmar',sans-serif;background:#0b1020;color:#f4f6ff}
 header{padding:22px 16px;background:linear-gradient(135deg,#192b58,#47218a);text-align:center}
-h1{font-size:23px;margin:0 0 7px}header p{margin:0;color:#d9ddff;font-size:14px}
-main{max-width:850px;margin:18px auto;padding:0 13px}.panel{background:#141c32;border:1px solid #2a3656;border-radius:16px;padding:17px;margin-bottom:15px}
-h2{font-size:18px;margin:0 0 14px;color:#9fe9ff}label{display:block;font-size:14px;margin:10px 0 5px;color:#d4dcf7}
+h1{font-size:23px;margin:0 0 7px}
+header p{margin:0;color:#d9ddff;font-size:14px}
+main{max-width:850px;margin:18px auto;padding:0 13px}
+.panel{background:#141c32;border:1px solid #2a3656;border-radius:16px;padding:17px;margin-bottom:15px}
+h2{font-size:18px;margin:0 0 14px;color:#9fe9ff}
+label{display:block;font-size:14px;margin:10px 0 5px;color:#d4dcf7}
 input,select,button{font:inherit;width:100%;padding:12px;border-radius:10px;border:1px solid #39486b;background:#0c1428;color:#fff}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{background:#6755ed;border:0;font-weight:700;margin-top:13px;cursor:pointer}.btn2{background:#1b8c72}.small{font-size:13px;color:#b8c4e5;line-height:1.6}.item{border:1px solid #354363;padding:12px;border-radius:12px;margin-top:10px}.item strong{color:#fff}.pill{display:inline-block;background:#283e65;padding:4px 8px;border-radius:99px;font-size:12px;margin:4px 0}
-a{color:#8fe8ff;word-break:break-all}.hidden{display:none}.notice{background:#382b16;border:1px solid #826327;color:#ffe5a3;padding:12px;border-radius:12px;font-size:13px;line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{background:#6755ed;border:0;font-weight:700;margin-top:13px;cursor:pointer}
+.btn2{background:#1b8c72}
+.btn3{background:#a43d50}
+.small{font-size:13px;color:#b8c4e5;line-height:1.7}
+.item{border:1px solid #354363;padding:12px;border-radius:12px;margin-top:10px}
+.item strong{color:#fff}
+.pill{display:inline-block;background:#283e65;padding:4px 8px;border-radius:99px;font-size:12px;margin:4px 0}
+a{color:#8fe8ff;word-break:break-all}
+.hidden{display:none}
+.notice{background:#382b16;border:1px solid #826327;color:#ffe5a3;padding:12px;border-radius:12px;font-size:13px;line-height:1.6}
+.msg{margin-top:12px;white-space:pre-wrap}
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
-</style></head>
+</style>
+</head>
 <body>
-<header><h1>🏆 ZeeGone E-Football Tournament</h1><p>Admin Tournament Manager • Prototype</p></header>
+
+<header>
+<h1>🏆 ZeeGone E-Football Tournament</h1>
+<p>Online Tournament Manager</p>
+</header>
+
 <main>
-<div class="notice">ဒီဟာ စမ်းသပ် Prototype ဖြစ်ပါတယ်။ ပြိုင်ပွဲဖန်တီးခြင်းနဲ့ demo registration ကို ဒီ Browser ထဲမှာ စမ်းနိုင်ပါတယ်။ အများသုံး Registration Link အစစ်ဖြစ်ဖို့ Website Hosting နဲ့ Online Database ချိတ်ဆက်ရန် ကျန်ပါသေးတယ်။</div>
+
+<div class="notice">
+ကစားသမားများသည် ပြိုင်ပွဲ Link မှတစ်ဆင့် အသင်းအမည်နှင့် ဖုန်းနံပါတ်ဖြင့် စာရင်းသွင်းနိုင်သည်။ Admin သာ ပြိုင်ပွဲဖန်တီးခြင်းနှင့် စာရင်းစစ်ဆေးခြင်း ပြုလုပ်နိုင်သည်။
+</div>
+
+<!-- PUBLIC REGISTRATION -->
+<section class="panel hidden" id="publicPanel">
+<h2>📝 ပြိုင်ပွဲစာရင်းသွင်းရန်</h2>
+<div id="publicInfo" class="small">ပြိုင်ပွဲအချက်အလက် ရယူနေသည်...</div>
+
+<label>အသင်းအမည်</label>
+<input id="teamname" placeholder="အသင်းအမည်">
+
+<label>ဆက်သွယ်ရန် ဖုန်းနံပါတ်</label>
+<input id="phone" type="tel" placeholder="09xxxxxxxxx">
+
+<button class="btn btn2" onclick="registerTeam()">စာရင်းသွင်းမယ်</button>
+<div id="regmsg" class="small msg"></div>
+</section>
+
+<!-- ADMIN LOGIN -->
+<section class="panel" id="loginPanel">
+<h2>🔐 Admin Login</h2>
+<p class="small">Admin Secret ကို ထည့်ပြီး စီမံခန့်ခွဲမှု စတင်ပါ။ ဒီ Secret ကို ကစားသမားများအား မပေးပါနှင့်။</p>
+
+<label>Admin Secret</label>
+<input id="secretInput" type="password" placeholder="Admin Secret ထည့်ပါ">
+
+<button class="btn" onclick="adminLogin()">Admin Login</button>
+<div id="loginMsg" class="small msg"></div>
+</section>
+
+<!-- ADMIN AREA -->
+<div id="adminArea" class="hidden">
+
 <section class="panel">
 <h2>➕ ပြိုင်ပွဲအသစ်ဖန်တီးရန်</h2>
-<label>ပြိုင်ပွဲအမည်</label><input id="name" placeholder="ဥပမာ - ZeeGone Cup Season 1">
-<div class="grid"><div><label>အသင်းအရေအတွက်</label><input id="teams" type="number" min="2" value="16"></div><div><label>ပြိုင်ပွဲပုံစံ</label><select id="format"><option>Knockout</option><option>Group Stage + Knockout</option><option>League</option></select></div>
-<div><label>ဝင်ကြေး (ကျပ်)</label><input id="fee" type="number" min="0" value="0"></div><div><label>ဆုကြေး (ကျပ်)</label><input id="prize" type="number" min="0" value="0"></div></div>
-<button class="btn" onclick="createTournament()">ပြိုင်ပွဲဖန်တီးမယ်</button>
-</section>
-<section class="panel"><h2>📋 ဖန်တီးထားသော ပြိုင်ပွဲများ</h2><div id="list" class="small">ပြိုင်ပွဲ မရှိသေးပါ။</div></section>
-<section class="panel hidden" id="regpanel"><h2>📝 Demo Registration Form</h2><p class="small" id="regtitle"></p>
-<label>အသင်းအမည်</label><input id="teamname" placeholder="အသင်းအမည်">
 
-<label>ဆက်သွယ်ရန် ဖုန်းနံပါတ်</label><input id="phone" type="tel" placeholder="09xxxxxxxxx">
-<button class="btn btn2" onclick="registerTeam()">စာရင်းသွင်းမယ်</button><div id="regmsg" class="small"></div></section>
+<label>ပြိုင်ပွဲအမည်</label>
+<input id="name" placeholder="ဥပမာ - ZeeGone Cup Season 1">
+
+<div class="grid">
+<div>
+<label>အသင်းအရေအတွက်</label>
+<input id="teams" type="number" min="2" value="16">
+</div>
+
+<div>
+<label>ပြိုင်ပွဲပုံစံ</label>
+<select id="format">
+<option>Knockout</option>
+<option>Group Stage + Knockout</option>
+<option>League</option>
+</select>
+</div>
+
+<div>
+<label>ဝင်ကြေး (ကျပ်)</label>
+<input id="fee" type="number" min="0" value="0">
+</div>
+
+<div>
+<label>ဆုကြေး (ကျပ်)</label>
+<input id="prize" type="number" min="0" value="0">
+</div>
+</div>
+
+<button class="btn" onclick="createTournament()">ပြိုင်ပွဲဖန်တီးမယ်</button>
+<div id="createMsg" class="small msg"></div>
+</section>
+
+<section class="panel">
+<h2>📋 ပြိုင်ပွဲများ</h2>
+<button class="btn btn2" onclick="loadTournaments()">ပြိုင်ပွဲစာရင်း ပြန်ဖွင့်မယ်</button>
+<div id="list" class="small">စာရင်းရယူနေသည်...</div>
+</section>
+
+<section class="panel hidden" id="entriesPanel">
+<h2>👥 စာရင်းဝင်အသင်းများ</h2>
+<div id="entriesList" class="small"></div>
+</section>
+
+<button class="btn btn3" onclick="logout()">Admin Logout</button>
+
+</div>
+
 </main>
+
 <script>
-let tournaments=JSON.parse(localStorage.getItem('zg_tournaments')||'[]');
-let active=null;
-function save(){localStorage.setItem('zg_tournaments',JSON.stringify(tournaments));render()}
-function createTournament(){
- const name=document.getElementById('name').value.trim(),teams=+document.getElementById('teams').value;
- if(!name||teams<2){alert('ပြိုင်ပွဲအမည်နဲ့ အသင်းအရေအတွက် (အနည်းဆုံး ၂) ဖြည့်ပါ');return}
- const t={id:Math.random().toString(36).slice(2,9),name,teams,format:document.getElementById('format').value,fee:+document.getElementById('fee').value||0,prize:+document.getElementById('prize').value||0,entries:[]};
- tournaments.unshift(t);save();document.getElementById('name').value='';
+const API_URL = "https://script.google.com/macros/s/AKfycbyG5fMD4YAiLa-vg9vl9YV4ox3fTuBPKFxD6VjXAaAi2aZe4vzNUSY28wlgb9tpA6qh/exec";
+
+let adminSecret = "";
+let currentTournament = null;
+
+// API REQUEST
+async function api(action, data = {}) {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify({
+      action,
+      ...data
+    })
+  });
+
+  const result = await response.json();
+
+  if (!result.success) {
+    throw new Error(result.message || "လုပ်ဆောင်မှု မအောင်မြင်ပါ");
+  }
+
+  return result;
 }
-function render(){
- const el=document.getElementById('list');
- if(!tournaments.length){el.textContent='ပြိုင်ပွဲ မရှိသေးပါ။';return}
- el.innerHTML=tournaments.map(t=>`<div class="item"><strong>${esc(t.name)}</strong><br><span class="pill">${esc(t.format)}</span><p class="small">အသင်း ${t.teams} သင်း · ဝင်ကြေး ${t.fee.toLocaleString()} ကျပ် · ဆုကြေး ${t.prize.toLocaleString()} ကျပ်<br>စာရင်းဝင်: ${t.entries.length}/${t.teams}</p><button class="btn" onclick="openReg('${t.id}')">Registration Form ဖွင့်မယ်</button><button class="btn btn2" onclick="copyLink('${t.id}')">Register Link Copy (Demo)</button><button class="btn" onclick="showEntries('${t.id}')">စာရင်းဝင်အသင်းများ ကြည့်မယ်</button></div>`).join('');
+
+// ADMIN LOGIN
+async function adminLogin() {
+  const secret = document.getElementById("secretInput").value.trim();
+  const msg = document.getElementById("loginMsg");
+
+  if (!secret) {
+    msg.textContent = "Admin Secret ထည့်ပါ။";
+    return;
+  }
+
+  msg.textContent = "စစ်ဆေးနေသည်...";
+
+  try {
+    await api("adminCheck", {
+      adminSecret: secret
+    });
+
+    adminSecret = secret;
+
+    document.getElementById("loginPanel").classList.add("hidden");
+    document.getElementById("adminArea").classList.remove("hidden");
+
+    msg.textContent = "";
+
+    await loadTournaments();
+
+  } catch (e) {
+    msg.textContent = "Login မအောင်မြင်ပါ: " + e.message;
+  }
 }
-function openReg(id){active=tournaments.find(t=>t.id===id);document.getElementById('regpanel').classList.remove('hidden');document.getElementById('regtitle').textContent=active.name+' • အသင်း '+active.teams+' သင်းအထိ';document.getElementById('regmsg').textContent='';window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
-function registerTeam(){
- if(!active)return;
- const n=document.getElementById('teamname').value.trim(),p=document.getElementById('phone').value.trim();
- if(!n||!p){alert('အသင်းအမည်နဲ့ ဖုန်းနံပါတ် ဖြည့်ပါ');return}
- if(active.entries.length>=active.teams){alert('အသင်းပြည့်သွားပါပြီ');return}
- active.entries.push({name:n,phone:p,status:'စစ်ဆေးရန်'});save();
- document.getElementById('regmsg').textContent='စာရင်းသွင်းမှုကို ဒီ Browser ထဲမှာ Demo အဖြစ် သိမ်းပြီးပါပြီ။';document.getElementById('teamname').value='';document.getElementById('phone').value='';
+
+// LOGOUT
+function logout() {
+  adminSecret = "";
+
+  document.getElementById("adminArea").classList.add("hidden");
+  document.getElementById("loginPanel").classList.remove("hidden");
+  document.getElementById("secretInput").value = "";
 }
-function showEntries(id){
- const t=tournaments.find(x=>x.id===id);
- if(!t.entries.length){alert('စာရင်းဝင်အသင်း မရှိသေးပါ');return}
- const lines=t.entries.map((e,i)=>`${i+1}. ${e.name} | ${e.phone} | ${e.status}`).join('\\n');
- const choice=prompt(lines+'\\n\\nပြင်ဆင်ရန် အသင်းနံပါတ်ထည့်ပါ (မပြင်လိုပါက Cancel)', '');
- if(choice===null||choice.trim()==='')return;
- const idx=Number(choice)-1;
- if(!Number.isInteger(idx)||idx<0||idx>=t.entries.length){alert('နံပါတ်မမှန်ပါ');return}
- const action=prompt(`${t.entries[idx].name}\\nA = လက်ခံ\\nR = ပယ်ချ\\nP = စစ်ဆေးရန်`, 'A');
- if(action===null)return;
- const a=action.trim().toUpperCase();
- if(a==='A')t.entries[idx].status='လက်ခံပြီး';
- else if(a==='R')t.entries[idx].status='ပယ်ချပြီး';
- else if(a==='P')t.entries[idx].status='စစ်ဆေးရန်';
- else {alert('A, R, P ထဲက တစ်ခုထည့်ပါ');return}
- save();alert('စာရင်းအခြေအနေ ပြင်ပြီးပါပြီ');
+
+// CREATE TOURNAMENT
+async function createTournament() {
+  const name = document.getElementById("name").value.trim();
+  const teams = Number(document.getElementById("teams").value);
+  const format = document.getElementById("format").value;
+  const fee = Number(document.getElementById("fee").value) || 0;
+  const prize = Number(document.getElementById("prize").value) || 0;
+
+  const msg = document.getElementById("createMsg");
+
+  if (!name || teams < 2 || !Number.isInteger(teams)) {
+    msg.textContent = "ပြိုင်ပွဲအမည်နှင့် အသင်းအရေအတွက် မှန်ကန်စွာထည့်ပါ။";
+    return;
+  }
+
+  msg.textContent = "ပြိုင်ပွဲဖန်တီးနေသည်...";
+
+  try {
+    await api("createTournament", {
+      adminSecret,
+      tournament: {
+        name,
+        teams,
+        format,
+        fee,
+        prize
+      }
+    });
+
+    msg.textContent = "ပြိုင်ပွဲဖန်တီးပြီးပါပြီ။";
+
+    document.getElementById("name").value = "";
+
+    await loadTournaments();
+
+  } catch (e) {
+    msg.textContent = "Error: " + e.message;
+  }
 }
-function copyLink(id){const url=location.href.split('#')[0]+'#register='+id;navigator.clipboard?.writeText(url).then(()=>alert('Demo Link Copy လုပ်ပြီးပါပြီ။ ဒီဖိုင်ကို Website အဖြစ် Hosting မတင်ရသေးလို့ တခြားဖုန်းကနေ အလုပ်မလုပ်သေးပါ။')).catch(()=>prompt('Demo link (Hosting လိုအပ်သည်):',url))}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-render();
-</script></body></html>
+
+// LOAD TOURNAMENTS
+async function loadTournaments() {
+  const el = document.getElementById("list");
+
+  el.textContent = "ပြိုင်ပွဲစာရင်း ရယူနေသည်...";
+
+  try {
+    const result = await api("listTournaments", {
+      adminSecret
+    });
+
+    if (!result.tournaments || !result.tournaments.length) {
+      el.textContent = "ပြိုင်ပွဲ မရှိသေးပါ။";
+      return;
+    }
+
+    el.innerHTML = result.tournaments.map(t => {
+      const url = location.href.split("#")[0] +
+        "#register=" + encodeURIComponent(t.id);
+
+      return `
+        <div class="item">
+          <strong>${esc(t.name)}</strong>
+          <br>
+          <span class="pill">${esc(t.format)}</span>
+
+          <p class="small">
+            အသင်း ${t.teams} သင်း<br>
+            ဝင်ကြေး ${Number(t.fee || 0).toLocaleString()} ကျပ်<br>
+            ဆုကြေး ${Number(t.prize || 0).toLocaleString()} ကျပ်<br>
+            စာရင်းဝင် ${t.entriesCount || 0}/${t.teams}
+          </p>
+
+          <button class="btn btn2"
+            onclick="copyLink('${esc(t.id)}')">
+            Registration Link Copy
+          </button>
+
+          <button class="btn"
+            onclick="showEntries('${esc(t.id)}')">
+            စာရင်းဝင်အသင်းများ ကြည့်မယ်
+          </button>
+        </div>
+      `;
+    }).join("");
+
+  } catch (e) {
+    el.textContent = "စာရင်းရယူမရပါ: " + e.message;
+  }
+}
+
+// COPY REGISTRATION LINK
+async function copyLink(id) {
+  const url = location.href.split("#")[0] +
+    "#register=" + encodeURIComponent(id);
+
+  try {
+    await navigator.clipboard.writeText(url);
+    alert("Registration Link ကူးပြီးပါပြီ။ ကစားသမားများထံ ပို့ပေးနိုင်ပါပြီ။");
+  } catch (e) {
+    prompt("ဒီ Link ကို ကူးယူပါ:", url);
+  }
+}
+
+// SHOW ENTRIES
+async function showEntries(id) {
+  const panel = document.getElementById("entriesPanel");
+  const el = document.getElementById("entriesList");
+
+  panel.classList.remove("hidden");
+  el.textContent = "စာရင်းရယူနေသည်...";
+
+  currentTournament = id;
+
+  try {
+    const result = await api("listEntries", {
+      adminSecret,
+      tournamentId: id
+    });
+
+    if (!result.entries || !result.entries.length) {
+      el.textContent = "စာရင်းဝင်အသင်း မရှိသေးပါ။";
+      return;
+    }
+
+    el.innerHTML = result.entries.map((e, i) => `
+      <div class="item">
+        <strong>${i + 1}. ${esc(e.teamName)}</strong>
+        <p class="small">
+          ဖုန်း: ${esc(e.phone)}<br>
+          အခြေအနေ: ${esc(e.status)}
+        </p>
+
+        <button class="btn btn2"
+          onclick="changeStatus('${esc(e.id)}','Approved')">
+          လက်ခံမယ်
+        </button>
+
+        <button class="btn btn3"
+          onclick="changeStatus('${esc(e.id)}','Rejected')">
+          ပယ်ချမယ်
+        </button>
+
+        <button class="btn"
+          onclick="changeStatus('${esc(e.id)}','Pending')">
+          စစ်ဆေးရန်
+        </button>
+      </div>
+    `).join("");
+
+  } catch (e) {
+    el.textContent = "Error: " + e.message;
+  }
+}
+
+// CHANGE REGISTRATION STATUS
+async function changeStatus(id, status) {
+  try {
+    await api("updateEntryStatus", {
+      adminSecret,
+      entryId: id,
+      status
+    });
+
+    alert("စာရင်းအခြေအနေ ပြောင်းပြီးပါပြီ။");
+
+    await showEntries(currentTournament);
+    await loadTournaments();
+
+  } catch (e) {
+    alert("Error: " + e.message);
+  }
+}
+
+// PUBLIC REGISTRATION
+async function registerTeam() {
+  const teamName = document.getElementById("teamname").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const msg = document.getElementById("regmsg");
+
+  if (!currentTournament) {
+    msg.textContent = "ပြိုင်ပွဲ မရွေးထားပါ။";
+    return;
+  }
+
+  if (!teamName || !phone) {
+    msg.textContent = "အသင်းအမည်နှင့် ဖုန်းနံပါတ် ဖြည့်ပါ။";
+    return;
+  }
+
+  msg.textContent = "စာရင်းသွင်းနေသည်...";
+
+  try {
+    await api("register", {
+      tournamentId: currentTournament,
+      teamName,
+      phone
+    });
+
+    msg.textContent = "စာရင်းသွင်းမှု အောင်မြင်ပါပြီ။ Admin မှ စစ်ဆေးပေးပါမည်။";
+
+    document.getElementById("teamname").value = "";
+    document.getElementById("phone").value = "";
+
+  } catch (e) {
+    msg.textContent = "စာရင်းသွင်းမရပါ: " + e.message;
+  }
+}
+
+// LOAD PUBLIC TOURNAMENT FROM LINK
+async function loadPublic() {
+  const hash = location.hash;
+
+  if (!hash.startsWith("#register=")) {
+    return;
+  }
+
+  const id = decodeURIComponent(
+    hash.substring("#register=".length)
+  );
+
+  currentTournament = id;
+
+  document.getElementById("publicPanel").classList.remove("hidden");
+
+  document.getElementById("publicInfo").textContent =
+    "ပြိုင်ပွဲအချက်အလက် ရယူနေသည်...";
+
+  try {
+    const result = await api("getPublicTournament", {
+      tournamentId: id
+    });
+
+    const t = result.tournament;
+
+    document.getElementById("publicInfo").innerHTML = `
+      <strong>${esc(t.name)}</strong><br>
+      အသင်းအရေအတွက်: ${t.teams}<br>
+      ပုံစံ: ${esc(t.format)}<br>
+      ဝင်ကြေး: ${Number(t.fee || 0).toLocaleString()} ကျပ်<br>
+      ဆုကြေး: ${Number(t.prize || 0).toLocaleString()} ကျပ်
+    `;
+
+  } catch (e) {
+    document.getElementById("publicInfo").textContent =
+      "ပြိုင်ပွဲ ရှာမတွေ့ပါ: " + e.message;
+  }
+}
+
+// HTML ESCAPE
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[c]);
+}
+
+loadPublic();
+</script>
+
+</body>
+ </html>
